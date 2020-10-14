@@ -36,19 +36,23 @@ Route::get('/students', function () {
     return view('students.detail', ['studentValue' => $student]);
 })->name('listStudent');
 
+
+Route::get('/students/create', function () {
+    return view('students.create');
+})->name('students.create');  
 // Gia tri truyen vao url se tuong ung vi tri tham so cua function
 Route::get('/students/{id}', function ($id) {
     
     $student = DB::table('students')->find($id);
     
     if (!$student) {
-        return redirect()->route('listStudent');
+        return redirect()->route('students.create');
     };
 
     return view('students.show', [
         'student' => $student
     ]);
-});
+})->name('showStudent');
 
 Route::get('/students/detail', function () {
     return view('students.detail');

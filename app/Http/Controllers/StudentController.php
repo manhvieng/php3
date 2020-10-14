@@ -30,7 +30,7 @@ class StudentController extends Controller
     // create() su dung phuong thuc GET, route name la students.create
     public function create()
     {
-        dd('Student Controller create');
+        return view('students.create');
     }
 
     /**
@@ -41,7 +41,16 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $student = new Student;
+
+        $student->name = $request->name;
+        $student->phone = $request->phone;
+        $student->age = $request->age;
+        $student->address = $request->address;
+        $student->gender = $request->gender;
+        
+        $student->save();
+        return redirect()->route('students.index');
     }
 
     /**
@@ -72,7 +81,7 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+        return view('students.edit',['student' => $student]);
     }
 
     /**
@@ -84,7 +93,17 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+        // dd($request->all());
+        // Gan gia tri moi cho cac thuoc tinh cua student can update
+        $student->name = $request->name;
+
+        //thực hiện phương thức save để lưu dữ liệu
+        $student->save();
+
+         // Cach 2: $student->update(['name' => $request->name]);
+        // Hoac $student->update([$request->all()])
+        // Khong can save
+        return redirect()->route('students.index');
     }
 
     /**
@@ -94,7 +113,15 @@ class StudentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Student $student)
+
     {
-        //
+
+        if ($student) {
+
+            $student->delete(); //trả về kqua true hoặc false
+            //cách 2: Student::destroy($student->id); //trả về số lượng bản ghi
+            //Redirect về danh sách(có thực hiện truy vấn lấy ds mới)
+            return redirect()->route('students.index');
+        }
     }
 }
